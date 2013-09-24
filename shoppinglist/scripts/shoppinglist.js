@@ -54,7 +54,8 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
             var found = data['data'][i]['bestLocation'] !== null;
 
             var loc = (found ? data['data'][i]['bestLocation'] : 'Not Found');
-            var bestPrice = parseFloat(data['data'][i]['bestPrice']);
+
+            var bestPrice = (found ? parseFloat(data['data'][i]['bestPrice']) : 0);
             var count = parseInt(data['data'][i]['count']);
 
             var subtotal = bestPrice * count
