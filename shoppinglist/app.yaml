@@ -1,0 +1,23 @@
+application: eveshoppinglist
+version: 2
+runtime: python27
+api_version: 1
+threadsafe: true
+
+libraries:
+- name: lxml
+  version: "latest"
+
+handlers:
+- url: /
+  static_files: index.html
+  upload: index.html
+
+- url: /stylesheets
+  static_dir: stylesheets
+
+- url: /scripts
+  static_dir: scripts
+
+- url: /app/.*
+  script:  shoppinglist.app
