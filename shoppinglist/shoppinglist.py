@@ -1,11 +1,13 @@
 #!/usr/bin/python2.7
 
 import webapp2, lxml.etree
-import json, urllib2
+import json, urllib2, re
 
 from invtypes import TYPES
 
 class GetPricing(webapp2.RequestHandler):
+    hasCount = re.compile('.* x([0-9]+)$')
+
     def get(self):
         self.response.headers['Content-Type'] = 'application/json;charset=UTF-8'
 
@@ -21,15 +23,29 @@ class GetPricing(webapp2.RequestHandler):
         items = {}
         for line in shopping_list:
             if line:
+                qty = 1
+
+                res = self.hasCount.match(line)
+                if res:
+                    qty = int(res.group(1))
+
+                    print line
+                    print res.group(1)
+                    print len(res.group(1))
+
+                    line = line[0:-(len(res.group(1))+2)]
+
+                    print line
+
                 if line in items.keys():
-                    items[line]['count'] = items[line]['count'] + 1
+                    items[line]['count'] = items[line]['count'] + qty
                 else:
                     try:
                         t = TYPES[line]
                         items[line] = {}
                         items[line]['name'] = line
                         items[line]['id'] = t
-                        items[line]['count'] = 1
+                        items[line]['count'] = qty
                     except KeyError:
                         if 'KeyError' not in errors.keys():
                             errors['KeyError'] = []
