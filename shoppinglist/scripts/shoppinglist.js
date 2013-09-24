@@ -51,14 +51,20 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
 
             var tr = $('<tr></tr>');
 
-            var subtotal = parseFloat(data['data'][i]['bestPrice']) * parseInt(data['data'][i]['count']);
+            var found = data['data'][i]['bestLocation'] !== null;
+
+            var loc = (found ? data['data'][i]['bestLocation'] : 'Not Found');
+            var bestPrice = parseFloat(data['data'][i]['bestPrice']);
+            var count = parseInt(data['data'][i]['count']);
+
+            var subtotal = bestPrice * count
             total = total + subtotal;
 
             tr.append('<td>' + data['data'][i]['count'] + '</td>');
             tr.append('<td>' + data['data'][i]['name'] + '</td>');
-            tr.append('<td>' + data['data'][i]['bestLocation'] + '</td>');
-            tr.append('<td>' + data['data'][i]['bestPrice'].formatMoney(2, ',', '.', '') + ' ISK</td>');
-            tr.append('<td>' + subtotal.formatMoney(2, ',', '.', '') + ' ISK</td>');
+            tr.append('<td>' + loc + '</td>');
+            tr.append('<td>' + (found ? bestPrice.formatMoney(2, ',', '.', '') + ' ISK' : 'Not Found') + '</td>');
+            tr.append('<td>' + (found ? subtotal.formatMoney(2, ',', '.', '') + ' ISK' : 'Not Found') + '</td>');
 
             tbody.append(tr);
         }
