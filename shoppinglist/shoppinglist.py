@@ -55,7 +55,7 @@ class GetPricing(webapp2.RequestHandler):
                     elif str(child.tag) == 'station_name':
                         loc = child.text
          
-                if items[item]['bestPrice'] is None or price > items[item]['bestPrice']:
+                if items[item]['bestPrice'] is None or price < items[item]['bestPrice']:
                     items[item]['bestPrice'] = price
                     items[item]['bestLocation'] = loc
 

@@ -20,6 +20,8 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
     var tbody = null;
     var grandTotal = null;
 
+    var errorlist = null;
+    var errormodel = null;
 
     var onClick = function(event) {
         if (textarea == null ||
@@ -40,6 +42,7 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
 
     var onResponse = function(data) {
         tbody.empty();
+        errorlist.empty();
 
         var total = 0;
 
@@ -58,6 +61,14 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
             tr.append('<td>' + subtotal.formatMoney(2, ',', '.', '') + ' ISK</td>');
 
             tbody.append(tr);
+        }
+
+        if (data['errors'].hasOwnProperty('KeyError')) {
+            for (var i in data['errors']['KeyError']) {
+                errorlist.append('<li>' + data['errors']['KeyError'][i] + '</li>');
+            }
+
+            errormodel.modal('show');
         }
 
         grandTotal.text(total.formatMoney(2, ',', '.', '') + ' ISK');
@@ -84,6 +95,14 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
 
     $.fn.ShoppingListGrandTotal = function() {
         grandTotal = this;
+    };
+
+    $.fn.ShoppingListErrorList = function() {
+        errorlist = this;
+    };
+
+    $.fn.ShoppingListErrorModel = function() {
+        errormodel = this;
     };
 
 }(jQuery));

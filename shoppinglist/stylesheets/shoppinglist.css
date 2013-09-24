@@ -26,3 +26,8 @@ table th:nth-child(5) { text-align: right; white-space: nowrap; font-size: 120%;
 table td:nth-child(1) { text-align: right; white-space: nowrap; }
 table td:nth-child(4) { text-align: right; white-space: nowrap; }
 table td:nth-child(5) { text-align: right; white-space: nowrap; }
+
+div.modal-content { background-color: #f2dede; border-color: #eed3d7; }
+div.modal-content div { border-color: #eed3d7; }
+div.modal-content div.modal-body { background-color: #fff; }
+div.modal-footer { margin-top: 0; }
