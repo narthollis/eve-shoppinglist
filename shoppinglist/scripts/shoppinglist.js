@@ -29,6 +29,10 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
             tbody == null ||
             grandTotal == null) return;
 
+        tbody.empty();
+        errorlist.empty();
+        grandTotal.text('0 ISK');
+
         $.ajax({
                 'url': 'app/get_pricing',
                 'type': 'POST',
@@ -41,15 +45,11 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
     };
 
     var onResponse = function(data) {
-        tbody.empty();
-        errorlist.empty();
 
         var total = 0;
 
         for (var i in data['data']) {
             if (!data['data'].hasOwnProperty(i)) continue;
-
-            var tr = $('<tr></tr>');
 
             var found = data['data'][i]['bestLocation'] !== null;
 
@@ -58,14 +58,26 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
             var bestPrice = (found ? parseFloat(data['data'][i]['bestPrice']) : 0);
             var count = parseInt(data['data'][i]['count']);
 
+            var dateClass = '';
+            if (found) {
+                if (data['data'][i]['diff']['days'] > 5) {
+                    dateClass = 'danger';
+                } else if (data['data'][i]['diff']['days'] > 1) {
+                    dateClass = 'warning';
+                }
+            }
+
             var subtotal = bestPrice * count
             total = total + subtotal;
 
+            var tr = $('<tr class="' + dateClass + '"></tr>');
+
             tr.append('<td>' + data['data'][i]['count'] + '</td>');
-            tr.append('<td>' + data['data'][i]['name'] + '</td>');
+            tr.append('<td><a href="http://www.eve-central.com/home/quicklook.html?typeid=' + data['data'][i]['id'] + '">' + data['data'][i]['name'] + '</a></td>');
             tr.append('<td>' + loc + '</td>');
             tr.append('<td>' + (found ? bestPrice.formatMoney(2, ',', '.', '') + ' ISK' : 'Not Found') + '</td>');
             tr.append('<td>' + (found ? subtotal.formatMoney(2, ',', '.', '') + ' ISK' : 'Not Found') + '</td>');
+            tr.append('<td>' + (found ? data['data'][i]['timeReported'] : 'Not Found') + '</td>');
 
             tbody.append(tr);
         }

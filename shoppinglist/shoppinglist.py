@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 
 import webapp2, lxml.etree
-import json, urllib2, re
+import json, urllib2, re, datetime
 
 from invtypes import TYPES
 
@@ -51,6 +51,9 @@ class GetPricing(webapp2.RequestHandler):
                             errors['KeyError'] = []
                         errors['KeyError'].append(line)
 
+        today = datetime.date.today()
+        now = datetime.datetime.now()
+
         for item in items.keys():
             url = 'http://api.eve-central.com/api/quicklook'
 
@@ -64,16 +67,29 @@ class GetPricing(webapp2.RequestHandler):
             for i in doc.findall('.quicklook/sell_orders/order'):
                 price = 0
                 loc = None
+                timeReported = None
          
                 for child in i:
-                    if str(child.tag) == 'price':
+                    if str(child.tag) == 'expires':
+                        (year,month,day) = str(child.text).split('-')
+
+                        expired = today > datetime.date(int(year), int(month), int(day))
+                    elif str(child.tag) == 'reported_time':
+                        timeReported = datetime.datetime.strptime(now.strftime('%Y-') + child.text, '%Y-%m-%d %H:%M:%S')
+                    elif str(child.tag) == 'price':
                         price = float(child.text)
                     elif str(child.tag) == 'station_name':
                         loc = child.text
-         
+                
+                if expired:
+                    continue
+
                 if items[item]['bestPrice'] is None or price < items[item]['bestPrice']:
                     items[item]['bestPrice'] = price
                     items[item]['bestLocation'] = loc
+                    items[item]['timeReported'] = timeReported.strftime('%H:%M %d/%m/%Y')
+                    diff = (now - timeReported)
+                    items[item]['diff'] = {'days': diff.days, 'seconds': diff.seconds}
 
         self.response.write(json.dumps({'data': items, 'errors': errors}))
 
