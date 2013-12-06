@@ -17,6 +17,7 @@
         '192.95.19.71': '<b>EVSCO</b> (eve-kill, zKillBoard)',
         '198.27.65.87': '<b>EVSCO</b> (eve-kill, zKillBoard)',
         '192.95.19.70': '<b>EVSCO</b> (eve-kill, zKillBoard)',
+        '82.192.91.225': '<b>adashboard</b>',
     };
 
     var __IP_CACHE = { };
@@ -85,6 +86,8 @@
                 agg[address]['hit_count'] = agg[address]['hit_count'] + 1;
             }
         }
+
+        delete agg['undefined'];
 
         for (var ip in agg) {
             if (!agg.hasOwnProperty(ip)) continue;

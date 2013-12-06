@@ -14,19 +14,17 @@ table tbody { height: 90%; overflow: auto; }
 
 table th { white-space: nowrap; }
 
-table th:nth-child(1), table td:nth-child(1) { width: 1%; }
-table th:nth-child(2), table td:nth-child(2) { width: auto; }
-table th:nth-child(3), table td:nth-child(3) { width: auto; text-overflow:ellipsis; }
-table th:nth-child(4), table td:nth-child(4) { width: 1%; }
-table th:nth-child(5), table td:nth-child(5) { width: 1%; }
-table th:nth-child(6), table td:nth-child(6) { width: 1%; }
+table th:nth-child(1), table td:nth-child(1) { text-align: center; width: 1%; }
+table th:nth-child(2), table td:nth-child(2) { text-align: center; width: 1%; }
+table th:nth-child(3), table td:nth-child(3) { text-align: center; width: auto; text-overflow:ellipsis; }
+table th:nth-child(4), table td:nth-child(4) { width: auto; text-overflow:ellipsis; }
+table th:nth-child(5), table td:nth-child(5) { text-align: center; width: 1%; }
 
-table th:nth-child(5) { text-align: right; white-space: nowrap; font-size: 120%; }
-
-table td:nth-child(1) { text-align: right; white-space: nowrap; }
-table td:nth-child(4) { text-align: right; white-space: nowrap; }
-table td:nth-child(5) { text-align: right; white-space: nowrap; }
-table td:nth-child(6) { text-align: right; white-space: nowrap; }
+table td:nth-child(1) { text-align: left; white-space: nowrap; }
+table td:nth-child(2) { text-align: left; white-space: nowrap; }
+table td:nth-child(3) { text-align: center; white-space: nowrap; }
+table td:nth-child(4) { text-align: left; white-space: nowrap; }
+table td:nth-child(5) { text-align: left; white-space: nowrap; }
 
 div.modal-content { background-color: #f2dede; border-color: #eed3d7; }
 div.modal-content div { border-color: #eed3d7; }
