@@ -1,5 +1,5 @@
 application: eveshoppinglist
-version: 2
+version: 3
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -13,6 +13,10 @@ handlers:
   static_files: index.html
   upload: index.html
 
+- url: /inspector/
+  static_files: inspector.html
+  upload: inspector.html
+
 - url: /stylesheets
   static_dir: stylesheets
 
@@ -21,3 +25,6 @@ handlers:
 
 - url: /app/.*
   script:  shoppinglist.app
+
+- url: /ip/.*
+  script:  iplookup.app
