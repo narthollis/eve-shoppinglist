@@ -1,13 +1,8 @@
 
 html, body { position: absolute; top: 0; left: 0; bottom: 0; right: 0; height: 100%; width: 100%; overflow: auto; }
+body { padding-top: 60px; }
 
-h1 { position: fixed; left: 0; top: 0; padding: 0 5%; }
-
-fieldset { position: fixed; left: 0; top: 69px; width: 30%; height: 80%; padding: 20px; }
-fieldset textarea.form-control { width: 100%; height: 100%; }
-fieldset button { margin: 10px; }
-
-body table.table { margin: 2% 2% 60px 32%; width: 65%; }
+body table.table { margin: auto; width: 96% }
 
 /*table thead, table tbody { display: block; }*/
 table tbody { height: 90%; overflow: auto; }
@@ -16,7 +11,7 @@ table th { white-space: nowrap; }
 
 table th:nth-child(1), table td:nth-child(1) { text-align: center; width: 1%; }
 table th:nth-child(2), table td:nth-child(2) { text-align: center; width: 1%; }
-table th:nth-child(3), table td:nth-child(3) { text-align: center; width: auto; text-overflow:ellipsis; }
+table th:nth-child(3), table td:nth-child(3) { text-align: center; width: 1%; }
 table th:nth-child(4), table td:nth-child(4) { width: auto; text-overflow:ellipsis; }
 table th:nth-child(5), table td:nth-child(5) { text-align: center; width: 1%; }
 
@@ -26,7 +21,5 @@ table td:nth-child(3) { text-align: center; white-space: nowrap; }
 table td:nth-child(4) { text-align: left; white-space: nowrap; }
 table td:nth-child(5) { text-align: left; white-space: nowrap; }
 
-div.modal-content { background-color: #f2dede; border-color: #eed3d7; }
-div.modal-content div { border-color: #eed3d7; }
-div.modal-content div.modal-body { background-color: #fff; }
-div.modal-footer { margin-top: 0; }
+div.modal-content div.modal-body textarea { min-height: 300px; }
+

@@ -19,23 +19,35 @@ class GetPricing(webapp2.RequestHandler):
 
         shopping_list = shopping_list.split('\n')
 
+
+        parsed_list = []
+        for line in shopping_list:
+            try:
+                if line.index(',') >= 0:
+                    # Handle EFT Ship line
+                    if line.startswith('['):
+                        # Strip leading and trailing [], split on , use first index
+                        parsed_list.append(line[1:][:-1].split(',')[0].strip())
+                    else:
+                        module, charge = line.split(',')
+                        parsed_list.append(module.strip())
+                        parsed_list.append(charge.strip())
+
+            except ValueError:
+                parsed_list.append(line)
+
         errors = {}
         items = {}
-        for line in shopping_list:
+        for line in parsed_list:
             if line:
+
                 qty = 1
 
                 res = self.hasCount.match(line)
                 if res:
                     qty = int(res.group(1))
 
-                    print line
-                    print res.group(1)
-                    print len(res.group(1))
-
                     line = line[0:-(len(res.group(1))+2)]
-
-                    print line
 
                 if line in items.keys():
                     items[line]['count'] = items[line]['count'] + qty

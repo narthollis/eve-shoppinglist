@@ -6,26 +6,47 @@
 
     var tbody = null;
 
-    var errorlist = null;
-    var errormodel = null;
+    var modal = null;
 
-    var SERVICES = {
-        '162.243.108.11': '<b>GoonSwarm Services</b>',
-        '162.243.86.192': '<b>GoonSwarm Services</b>',
-        '119.9.13.223': '<b>Sundering ECM</b> or <b>evething.narthollis.net</b>',
-        '198.50.153.201': '<b>EVSCO</b> (eve-kill, zKillBoard)',
-        '192.95.19.71': '<b>EVSCO</b> (eve-kill, zKillBoard)',
-        '198.27.65.87': '<b>EVSCO</b> (eve-kill, zKillBoard)',
-        '192.95.19.70': '<b>EVSCO</b> (eve-kill, zKillBoard)',
-        '82.192.91.225': '<b>adashboard</b>',
+    var client_ip = null;
+
+    var IP_TO_SERVICE = {
+        '162.243.108.11': 'gsf',
+        '162.243.86.192': 'gsf',
+        '119.9.13.223': 'narth',
+        '198.50.153.201': 'evsco',
+        '192.95.19.71': 'evsco',
+        '198.27.65.87': 'evsco',
+        '192.95.19.70': 'evsco',
+        '82.221.99.204': 'evsco',
+        '82.192.91.225': 'adashboard',
+        '174.142.121.124': 'fa',
+        '82.99.35.34': 'eveboard',
+        '74.208.71.145': 'groon',
+        '91.250.80.214': 'sv',
+    };
+
+    var SERVICE_NAMES = {
+        'gsf': '<b>GoonSwarm Services</b>',
+        'narth': '<b>Sundering ECM</b> or <b>evething.narthollis.net</b>',
+        'evsco': '<b>EVSCO</b> (eve-kill, zKillBoard)',
+        'adashboard': '<b>adashboard</b>',
+        'fa': '<b>Fatal Ascention Auth</b>',
+        'eveboard': '<b>eveboard character sheets</b>',
+        'groon': '<b>groon killboard</b>',
+        'sv': '<b>space violence killboard</b>',
     };
 
     var __IP_CACHE = { };
 
-
     var resolve_name = function(ip, td) {
-        if (typeof(SERVICES[ip]) !== 'undefined') {
-            td.html(SERVICES[ip]);
+        if (ip == client_ip) {
+            td.html("<b>YOUR CURRENT IP</b>");
+            return
+        }
+
+        if (typeof(IP_TO_SERVICE[ip]) !== 'undefined') {
+            td.html(SERVICE_NAMES[IP_TO_SERVICE[ip]]);
             return
         }
         
@@ -57,8 +78,9 @@
             button == null ||
             tbody == null) return;
 
+        modal.modal('hide');
+
         tbody.empty();
-        errorlist.empty();
 
         var lines = textarea.val().split('\n');
 
@@ -104,6 +126,8 @@
 
             resolve_name(ip, name_td);
         }
+
+        textarea.val('');
     };
 
     $.fn.LogAggregateButton = function() {
@@ -120,12 +144,14 @@
         tbody = this;
     };
 
-    $.fn.LogAggregateErrorList = function() {
-        errorlist = this;
+    $.fn.LogAggregateModal = function() {
+        modal = this;
+
+        modal.modal('show');
     };
 
-    $.fn.LogAggregateErrorModel = function() {
-        errormodel = this;
+    $.fn.StoreClientIP = function(data) {
+        client_ip = data['YourFuckingIPAddress'];
     };
 
 }(jQuery));

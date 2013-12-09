@@ -21,7 +21,8 @@ class Resolver(object):
             cls.resolver = resolver.Resolver()
             cls.resolver.nameservers = ['8.8.8.8', '8.8.4.4']
 
-        rev_name = reversename.from_address(address)
+        rev_name = reversename.from_address(address.strip())
+        print rev_name
         response = cls.resolver.query(rev_name, "PTR", raise_on_no_answer=True)
         
         return str(response[0])

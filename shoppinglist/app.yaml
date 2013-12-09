@@ -13,9 +13,16 @@ handlers:
   static_files: index.html
   upload: index.html
 
-- url: /inspector/
+- url: /shoppinglist
+  static_files: index.html
+  upload: index.html
+
+- url: /logaggregator
   static_files: inspector.html
   upload: inspector.html
+
+- url: /inspector/.*
+  script: redirector.app
 
 - url: /stylesheets
   static_dir: stylesheets
