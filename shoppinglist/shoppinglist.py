@@ -69,39 +69,43 @@ class GetPricing(webapp2.RequestHandler):
         for item in items.keys():
             url = 'http://api.eve-central.com/api/quicklook'
 
-            req = urllib2.urlopen(url, 'regionlimit=%s&typeid=%s' % (region, items[item]['id']))
+            try:
+                req = urllib2.urlopen(url, 'regionlimit=%s&typeid=%s' % (region, items[item]['id']))
 
-            doc = lxml.etree.fromstring(req.read())
+                doc = lxml.etree.fromstring(req.read())
 
-            items[item]['bestPrice'] = None
-            items[item]['bestLocation'] = None
-         
-            for i in doc.findall('.quicklook/sell_orders/order'):
-                price = 0
-                loc = None
-                timeReported = None
-         
-                for child in i:
-                    if str(child.tag) == 'expires':
-                        (year,month,day) = str(child.text).split('-')
+                items[item]['bestPrice'] = None
+                items[item]['bestLocation'] = None
+             
+                for i in doc.findall('.quicklook/sell_orders/order'):
+                    price = 0
+                    loc = None
+                    timeReported = None
+             
+                    for child in i:
+                        if str(child.tag) == 'expires':
+                            (year,month,day) = str(child.text).split('-')
 
-                        expired = today > datetime.date(int(year), int(month), int(day))
-                    elif str(child.tag) == 'reported_time':
-                        timeReported = datetime.datetime.strptime(now.strftime('%Y-') + child.text, '%Y-%m-%d %H:%M:%S')
-                    elif str(child.tag) == 'price':
-                        price = float(child.text)
-                    elif str(child.tag) == 'station_name':
-                        loc = child.text
-                
-                if expired:
-                    continue
+                            expired = today > datetime.date(int(year), int(month), int(day))
+                        elif str(child.tag) == 'reported_time':
+                            timeReported = datetime.datetime.strptime(now.strftime('%Y-') + child.text, '%Y-%m-%d %H:%M:%S')
+                        elif str(child.tag) == 'price':
+                            price = float(child.text)
+                        elif str(child.tag) == 'station_name':
+                            loc = child.text
+                    
+                    if expired:
+                        continue
 
-                if items[item]['bestPrice'] is None or price < items[item]['bestPrice']:
-                    items[item]['bestPrice'] = price
-                    items[item]['bestLocation'] = loc
-                    items[item]['timeReported'] = timeReported.strftime('%H:%M %d/%m/%Y')
-                    diff = (now - timeReported)
-                    items[item]['diff'] = {'days': diff.days, 'seconds': diff.seconds}
+                    if items[item]['bestPrice'] is None or price < items[item]['bestPrice']:
+                        items[item]['bestPrice'] = price
+                        items[item]['bestLocation'] = loc
+                        items[item]['timeReported'] = timeReported.strftime('%H:%M %d/%m/%Y')
+                        diff = (now - timeReported)
+                        items[item]['diff'] = {'days': diff.days, 'seconds': diff.seconds}
+
+            except Exception, e:
+                errors[repr(e)] = str(e)
 
         self.response.write(json.dumps({'data': items, 'errors': errors}))
 

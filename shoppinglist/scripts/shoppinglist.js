@@ -22,7 +22,6 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
 
     var inputModal = null;
 
-    var errorlist = null;
     var errormodal = null;
 
     var onClick = function(event) {
@@ -32,7 +31,6 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
             grandTotal == null) return;
 
         tbody.empty();
-        errorlist.empty();
         grandTotal.text('0 ISK');
 
         $.ajax({
@@ -47,6 +45,7 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
     };
 
     var onResponse = function(data) {
+        errormodal.find('.modal-body').empty();
 
         var total = 0;
 
@@ -84,10 +83,25 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
             tbody.append(tr);
         }
 
-        if (data['errors'].hasOwnProperty('KeyError')) {
-            for (var i in data['errors']['KeyError']) {
-                errorlist.append('<li>' + data['errors']['KeyError'][i] + '</li>');
+        for (var error in data['errors']) {
+            if (!data['errors'].hasOwnProperty(error)) continue;
+
+            var modal_body = errormodal.find('.modal-body');
+
+            var heading = $('<h4>' + error + '</h4>');
+            if (error == 'KeyError') {
+                heading = '<h4>The following items could not be found</h4>';
             }
+            modal_body.append(heading);
+
+            var ul = $('<ul></ul>');
+
+            for (var item in data['errors'][error]) {
+                if (!data['errors'][error].hasOwnProperty(item)) continue;
+
+                ul.append('<li>' + data['errors'][error][item] + '</li>');
+            }
+            modal_body.append(ul);
 
             errormodal.modal('show');
         }
@@ -123,10 +137,6 @@ Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator, 
     $.fn.ShoppingListModal = function() {
         inputModal = this;
         inputModal.modal('show');
-    };
-
-    $.fn.ShoppingListErrorList = function() {
-        errorlist = this;
     };
 
     $.fn.ShoppingListErrorModal = function() {
