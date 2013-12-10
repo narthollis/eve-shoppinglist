@@ -1,5 +1,5 @@
 application: eveshoppinglist
-version: 3
+version: 4
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -9,6 +9,10 @@ libraries:
   version: "latest"
 
 handlers:
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+
 - url: /
   static_files: index.html
   upload: index.html
@@ -35,3 +39,12 @@ handlers:
 
 - url: /ip/.*
   script:  iplookup.app
+
+- url: /browserconfig.xml
+  static_files: blank
+  upload: blank
+
+- url: /l
+  static_files: blank
+  upload: blank
+
