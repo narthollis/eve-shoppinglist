@@ -24,6 +24,7 @@
         '82.99.35.34': 'eveboard',
         '74.208.71.145': 'groon',
         '91.250.80.214': 'sv',
+        '67.203.13.246': 'bikezen',
     };
 
     var SERVICE_NAMES = {
@@ -35,6 +36,7 @@
         'eveboard': '<b>eveboard character sheets</b>',
         'groon': '<b>groon killboard</b>',
         'sv': '<b>space violence killboard</b>',
+        'bikezen': '<b>evething.bikezen.net</b>',
     };
 
     var __IP_CACHE = { };
